@@ -34,7 +34,6 @@ const tableSchema = new mongoose.Schema(
     }
 )
 
-tableSchema.index({tableActive: 1});
-tableSchema.index({restaurantId: 1});
-tableSchema.index({tableActive: 1, restaurantId: 1});
+tableSchema.index({ tableActive: 1, createdAt: -1 });
+tableSchema.index({ tableActive: 1, restaurantId: 1, createdAt: -1 });
 export default mongoose.model("Table", tableSchema);
