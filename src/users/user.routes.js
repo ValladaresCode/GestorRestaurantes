@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import {createUser, getUsers} from "./user.controller.js";
 
-import { validateCreateUser} from "../../middlewares/validateUser.js";
+import { validateCreateUser} from "../../middlewares/validateUsers.js";
 
 const router = Router();
 
