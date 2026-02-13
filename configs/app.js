@@ -17,7 +17,7 @@ const app = express();
 
 // 🔹 Middlewares
 app.use(helmet());
-app.use(cors(corsOptions)); // ✅ SOLO UNA VEZ
+app.use(cors(corsOptions)); 
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false, limit: "10mb" }));
 app.use(express.json({ limit: "10mb" }));
