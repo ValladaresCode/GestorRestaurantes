@@ -38,7 +38,7 @@ POST http://localhost:3006/gestorRestaurantes/api/v1/restaurants
 }
 
 
-Listar restaurantes:
+Listar restaurantes
 GET http://localhost:3006/gestorRestaurantes/api/v1/restaurants
 
 Actualizar restaurante:
