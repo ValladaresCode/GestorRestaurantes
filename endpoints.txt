@@ -10,8 +10,6 @@ http://localhost:3006/gestorRestaurantes/api/v1/users/create
   "userType": "CLIENTE"
 }
 
-
-
 Menus:
 
 Crear menu:
@@ -25,15 +23,14 @@ POST http://localhost:3006/gestorRestaurantes/api/v1/menus
   "restaurantId": 1
 }
 
-listar menu:
+listar menu
 GET http://localhost:3006/gestorRestaurantes/api/v1/menus
 
-actualizar menu:
+actualizar menu
 PUT http://localhost:3006/gestorRestaurantes/api/v1/menus/id
 
 Eliminar menú
 DELETE http://localhost:3006/gestorRestaurantes/api/v1/menus/id
-
 
 RESTAURANTS:
 
@@ -57,7 +54,6 @@ PUT http://localhost:3006/gestorRestaurantes/api/v1/restaurants/id
 
 Eliminar restaurante:
 DELETE http://localhost:3006/gestorRestaurantes/api/v1/restaurants/id
-
 
 
 Tables:
