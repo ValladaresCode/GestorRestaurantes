@@ -8,7 +8,6 @@ import morgan from "morgan";
 import { dbConnection } from "./db.js";
 import { corsOptions } from "./cors-configuration.js";
 
-import userRoutes from "../src/users/user.routes.js";
 import restaurantRoutes from "../src/restaurants/restaurant.routes.js";
 import menuRoutes from "../src/menus/menu.routes.js";
 import tableRoutes from "../src/tables/table.routes.js";
@@ -32,7 +31,6 @@ app.get("/health", (_req, res) => {
 });
 
 // 🔹 Rutas
-app.use("/gestorRestaurantes/api/v1/users", userRoutes);
 app.use("/gestorRestaurantes/api/v1/restaurants", restaurantRoutes);
 app.use("/gestorRestaurantes/api/v1/menus", menuRoutes);
 app.use("/gestorRestaurantes/api/v1/tables", tableRoutes);

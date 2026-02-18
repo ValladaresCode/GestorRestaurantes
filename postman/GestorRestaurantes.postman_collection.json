@@ -1,0 +1,197 @@
+{
+  "info": {
+    "name": "GestorRestaurantes API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colección Postman para la API GestorRestaurantes"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3006",
+      "description": "Base URL del servidor"
+    },
+    {
+      "key": "restaurantId",
+      "value": "",
+      "description": "ID de ejemplo para operaciones sobre un restaurante"
+    },
+    {
+      "key": "menuId",
+      "value": "",
+      "description": "ID de ejemplo para operaciones sobre un menú"
+    },
+    {
+      "key": "tableId",
+      "value": "",
+      "description": "ID de ejemplo para operaciones sobre una mesa"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Comprueba el estado del servicio"
+      }
+    },
+
+    {
+      "name": "Restaurants - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"restaurantName\": \"La Buena Mesa\",\n  \"restaurantAddress\": \"Zona 1, Ciudad de Guatemala\",\n  \"restaurantPhone\": \"5555-1234\",\n  \"restaurantEmail\": \"labuenamesa@gmail.com\",\n  \"openingHours\": \"09:00\",\n  \"closingHours\": \"21:00\",\n  \"restaurantPhoto\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/create",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "gestorRestaurantes",
+            "api",
+            "v1",
+            "restaurants",
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Restaurants - List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants",
+          "host": ["{{baseUrl}}"],
+          "path": ["gestorRestaurantes","api","v1","restaurants"]
+        }
+      }
+    },
+    {
+      "name": "Restaurants - Get by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/{{restaurantId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["gestorRestaurantes","api","v1","restaurants","{{restaurantId}}"]
+        },
+        "description": "Reemplaza {{restaurantId}} por un id válido"
+      }
+    },
+    {
+      "name": "Restaurants - Update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"restaurantName\": \"La Buena Mesa - Actualizado\",\n  \"restaurantAddress\": \"Zona 1, Ciudad de Guatemala\",\n  \"restaurantPhone\": \"5555-9876\",\n  \"restaurantEmail\": \"labuenamesa@gmail.com\",\n  \"openingHours\": \"08:00\",\n  \"closingHours\": \"22:00\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/{{restaurantId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","restaurants","{{restaurantId}}"] }
+      }
+    },
+    {
+      "name": "Restaurants - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/{{restaurantId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","restaurants","{{restaurantId}}"] }
+      }
+    },
+
+    {
+      "name": "Menus - Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"menuName\": \"Hamburguesa Clásica\",\n  \"menuDescription\": \"Hamburguesa con queso, lechuga y tomate\",\n  \"menuPrice\": 45.5,\n  \"menuCategory\": \"PLATO_FUERTE\",\n  \"menuPhoto\": null,\n  \"restaurantId\": \"{{restaurantId}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/menus", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","menus"] }
+      }
+    },
+    {
+      "name": "Menus - List",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/menus", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","menus"] } }
+    },
+    {
+      "name": "Menus - Get by ID",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/menus/{{menuId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","menus","{{menuId}}"] }, "description": "Reemplaza {{menuId}} por un id válido" }
+    },
+    {
+      "name": "Menus - Update",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"menuName\": \"Hamburguesa Deluxe\",\n  \"menuPrice\": 55.0,\n  \"menuCategory\": \"PLATO_FUERTE\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/menus/{{menuId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","menus","{{menuId}}"] }
+      }
+    },
+    {
+      "name": "Menus - Delete",
+      "request": { "method": "DELETE", "header": [], "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/menus/{{menuId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","menus","{{menuId}}"] } }
+    },
+
+    {
+      "name": "Tables - Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"tableName\": \"Mesa 1\",\n  \"tableCapacity\": 4,\n  \"restaurantId\": \"{{restaurantId}}\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/tables", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","tables"] }
+      }
+    },
+    {
+      "name": "Tables - List",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/tables", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","tables"] } }
+    },
+    {
+      "name": "Tables - Get by ID",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/tables/{{tableId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","tables","{{tableId}}"] }, "description": "Reemplaza {{tableId}} por un id válido" }
+    },
+    {
+      "name": "Tables - Update",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"tableName\": \"Mesa 1 - Actualizada\",\n  \"tableCapacity\": 6\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/tables/{{tableId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","tables","{{tableId}}"] }
+      }
+    },
+    {
+      "name": "Tables - Delete",
+      "request": { "method": "DELETE", "header": [], "url": { "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/tables/{{tableId}}", "host": ["{{baseUrl}}"], "path": ["gestorRestaurantes","api","v1","tables","{{tableId}}"] } }
+    }
+  ]
+}

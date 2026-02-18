@@ -1,22 +1,9 @@
+// USERS MODULE REMOVED
+// This file was intentionally emptied as part of removing the users module.
+// If you need to restore users later, re-create routes, controller and model.
+
 import { Router } from "express";
-
-import {createUser, getUsers} from "./user.controller.js";
-
-import { validateCreateUser} from "../../middlewares/validateUsers.js";
-
 const router = Router();
 
-
-router.post(
-    "/create",
-    validateCreateUser,
-    createUser
-);
-
-
-router.get(
-    "/",
-    getUsers
-);
-
+// Keep an empty router to avoid breaking any accidental imports.
 export default router;

@@ -1,15 +1,3 @@
-Crear un usuario:
-http://localhost:3006/gestorRestaurantes/api/v1/users/create
-
-{
-  "userNombre": "Juan",
-  "userApellido": "Perez",
-  "userEmail": "juan@gmail.com",
-  "userPassword": "123456",
-  "userPhone": "55555555",
-  "userType": "CLIENTE"
-}
-
 Menus:
 
 Crear menu:
