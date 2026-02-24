@@ -4,9 +4,8 @@ import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema(
     {
-        userId: {
+        adminId: {
             type: String,
-            required: [true, "User Id is required"]
         },
 
         restaurantId:{

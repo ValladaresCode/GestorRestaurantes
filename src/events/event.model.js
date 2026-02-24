@@ -9,20 +9,9 @@ const eventSchema = new mongoose.Schema(
             ref: "Reservation",
             required: [true, "Reservation Id is required"]
         },
+
         description: {
             type: String
-        },
-        photo: {
-            type: String,
-            default: null
-        },
-        startDate: {
-            type: Date,
-            required: [true, "Start date is required"]
-        },
-        endDate: {
-            type: Date,
-            required: [true, "End date is required"]
         },
 
         isActive: {

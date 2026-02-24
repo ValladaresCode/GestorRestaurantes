@@ -5,8 +5,7 @@ import mongoose from 'mongoose';
 const reservationSchema = new mongoose.Schema(
     {
         userId: {
-            type: String,
-            required: [true, "User Id is required"]
+            type: String
         },
 
         restaurantId:{
@@ -15,11 +14,14 @@ const reservationSchema = new mongoose.Schema(
             required: [true, "restaurante Id is required"]
         },
 
-        tableId:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Table",
-            required: [true, "mesa Id is required"]
-        },
+        tableId:
+            [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Table",
+                    required: [true, "mesa Id is required"]
+                }
+            ],
 
         numberPeople:{
             type: Number,
@@ -32,11 +34,29 @@ const reservationSchema = new mongoose.Schema(
             required: [true, "Type of reservation is required (PERSONAL, EVENTO)"]
         },
 
+        description: {
+            type: String
+        },
+
+        startDate: {
+            type: Date,
+            required: [true, "Start date is required"]
+        },
+        endDate: {
+            type: Date,
+            required: [true, "End date is required"]
+        },
+
+        photo: {
+            type: String,
+            default: null
+        },
+
         status:{
             type: String,
             enum: ["COMPLETADO", "PENDIENTE", "CANCELADO"],
             default: "PENDIENTE"
-        }
+        },
     },
     {
         timestamps: true,
