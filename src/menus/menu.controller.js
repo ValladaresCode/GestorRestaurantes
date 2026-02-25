@@ -1,6 +1,7 @@
 "use strict";
 
 import Menu from "./menu.model.js";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const createMenu = async (req, res) => {
   try {
@@ -18,6 +19,13 @@ export const createMenu = async (req, res) => {
     });
 
   } catch (error) {
+    if (req.file) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename);
+      } catch (err) {
+        console.error("Error cleaning up image:", err);
+      }
+    }
     return res.status(500).json({
       success: false,
       message: error.message
@@ -59,6 +67,13 @@ export const getMenuById = async (req, res) => {
     });
 
   } catch (error) {
+    if (req.file) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename);
+      } catch (err) {
+        console.error("Error cleaning up image:", err);
+      }
+    }
     return res.status(500).json({
       success: false,
       message: error.message
@@ -92,6 +107,13 @@ export const updateMenu = async (req, res) => {
     });
 
   } catch (error) {
+    if (req.file) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename);
+      } catch (err) {
+        console.error("Error cleaning up image:", err);
+      }
+    }
     return res.status(500).json({
       success: false,
       message: error.message

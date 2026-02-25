@@ -39,7 +39,7 @@ const menuSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Restaurant",
             required: [true, "restaurant Id is required"]
-        }
+        },
 
     },
     {
