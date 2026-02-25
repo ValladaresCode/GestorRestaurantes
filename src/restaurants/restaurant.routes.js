@@ -9,6 +9,8 @@ import {
   deleteRestaurant
 } from "./restaurant.controller.js";
 import { uploadFieldImage } from "../../middlewares/file-uploader.js";
+import { validateJWT, isAdmin } from "../../middlewares/validate-JWT.js";
+import { validateCreateRestaurant, validateUpdateRestaurant } from "../../middlewares/validateRestaurants.js";
 
 const router = Router();
 
@@ -16,30 +18,30 @@ const router = Router();
  * @route   POST /gestorRestaurantes/api/v1/restaurants/create
  * @desc    Crear restaurante
  */
-router.post("/create", uploadFieldImage.single('restaurantPhoto'), createRestaurant);
+router.post("/create", validateJWT, isAdmin, uploadFieldImage.single('restaurantPhoto'), validateCreateRestaurant, createRestaurant);
 
 /**
  * @route   GET /gestorRestaurantes/api/v1/restaurants
  * @desc    Obtener todos los restaurantes
  */
-router.get("/", getRestaurants);
+router.get("/", validateJWT, isAdmin, getRestaurants);
 
 /**
  * @route   GET /gestorRestaurantes/api/v1/restaurants/:id
  * @desc    Obtener restaurante por ID
  */
-router.get("/:id", getRestaurantById);
+router.get("/:id", validateJWT, isAdmin, getRestaurantById);
 
 /**
  * @route   PUT /gestorRestaurantes/api/v1/restaurants/:id
  * @desc    Actualizar restaurante
  */
-router.put("/:id", updateRestaurant);
+router.put("/:id", validateJWT, isAdmin, validateUpdateRestaurant, updateRestaurant);
 
 /**
  * @route   DELETE /gestorRestaurantes/api/v1/restaurants/:id
  * @desc    Eliminar restaurante (soft delete recomendado)
  */
-router.delete("/:id", deleteRestaurant);
+router.delete("/:id", validateJWT, isAdmin, deleteRestaurant);
 
 export default router;
