@@ -41,6 +41,14 @@ const menuSchema = new mongoose.Schema(
             required: [true, "restaurant Id is required"]
         },
 
+        inventoryId:[ 
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Inventory",
+                required: [true, "inventory Id is required"]
+            }
+        ]
+
     },
     {
         timestamps: true,
