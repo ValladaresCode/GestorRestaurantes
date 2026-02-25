@@ -182,6 +182,27 @@
       ]
     },
     {
+      "name": "Statistics",
+      "item": [
+        {
+          "name": "List Restaurant Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/statistics/:restaurantId"
+          }
+        },
+        {
+          "name": "Export Statistics PDF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/statistics/:restaurantId/pdf"
+          }
+        }
+      ]
+    },
+    {
       "name": "Events (not mounted by default)",
       "item": [
         { "name": "Create Event (requires auth - validateJwt)", "request": { "method": "POST", "header": [ { "key": "Authorization", "value": "Bearer <token>" } ], "body": { "mode": "raw", "raw": "{ \"reservationId\": \"<reservationId>\", \"description\": \"Evento\" }", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/gestorRestaurantes/api/v1/events/" } },

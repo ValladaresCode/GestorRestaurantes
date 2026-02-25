@@ -14,6 +14,7 @@ import tableRoutes from "../src/tables/table.routes.js";
 import reservationRoutes from "../src/reservations/reservation.routes.js";
 import orderRoutes from "../src/orders/order.routes.js";
 import eventRoutes from "../src/events/event.routes.js"
+import statisticsRoutes from "../src/statistics/statistics.routes.js"
 
 
 const app = express();
@@ -41,6 +42,7 @@ app.use("/gestorRestaurantes/api/v1/tables", tableRoutes);
 app.use("/gestorRestaurantes/api/v1/reservations", reservationRoutes);
 app.use("/gestorRestaurantes/api/v1/orders", orderRoutes);
 app.use("/gestorRestaurantes/api/v1/events", eventRoutes);
+app.use("/gestorRestaurantes/api/v1/statistics", statisticsRoutes);
 
 // 🔹 404
 app.use((req, res) => {
