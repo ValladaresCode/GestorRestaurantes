@@ -1,0 +1,79 @@
+'use strict';
+
+import { body, param, validationResult } from 'express-validator';
+import Restaurant from '../src/restaurants/restaurant.model.js';
+import mongoose from 'mongoose';
+
+const handleValidation = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (errors.isEmpty()) {
+        return next();
+    }
+
+    return res.status(400).json({
+        success: false,
+        message: 'Error de validación',
+        errors: errors.array().map((error) => ({
+            field: error.path,
+            message: error.msg
+        }))
+    });
+};
+
+export const createOrderValidator = [
+    body('restaurantId')
+        .notEmpty().withMessage('El ID del restaurante es obligatorio')
+        .isMongoId().withMessage('El ID del restaurante debe ser válido')
+        .custom(async (value) => {
+            const exists = await Restaurant.exists({ _id: value });
+            if (!exists) {
+                throw new Error('Restaurante no encontrado');
+            }
+            return true;
+        }),
+    
+    body('tableId')
+        .optional()
+        .isMongoId().withMessage('El ID de la mesa debe ser válido'),
+
+    body('items')
+        .customSanitizer((value) => {
+            // Handle string input from form-data
+            if (typeof value === 'string') {
+                try {
+                    const parsed = JSON.parse(value);
+                    return Array.isArray(parsed) ? parsed : [parsed];
+                } catch (e) {
+                    return value.split(',').map(s => s.trim()).filter(Boolean);
+                }
+            }
+            return value;
+        })
+        .isArray({ min: 1 }).withMessage('Los ítems deben ser un arreglo no vacío')
+        .custom((items) => {
+            for (const item of items) {
+                if (!mongoose.Types.ObjectId.isValid(String(item))) {
+                    throw new Error(`ID de ítem inválido: ${item}`);
+                }
+            }
+            return true;
+        }),
+
+    body('total')
+        .optional()
+        .isNumeric().withMessage('El total debe ser un número'),
+
+    handleValidation
+];
+
+export const updateOrderStatusValidator = [
+    param('id')
+        .isMongoId().withMessage('ID de orden inválido'),
+    
+    body('status')
+        .notEmpty().withMessage('El estado es obligatorio')
+        .isIn(['PENDIENTE', 'ENTREGADO', 'CANCELADO']).withMessage('Estado inválido. Debe ser uno de: PENDIENTE, ENTREGADO, CANCELADO'),
+
+    handleValidation
+];
