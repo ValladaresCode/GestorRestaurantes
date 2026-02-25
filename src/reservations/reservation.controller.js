@@ -9,27 +9,13 @@ import Reservation from './reservation.model.js'
 export const createReservation = async (req, res) => {
     try {
 
-        const {
-            restaurantId,
-            tableId,
-            numberPeople,
-            typeReservation,
-            description,
-            startDate,
-            endDate,
-            photo
-        } = req.body
+        // build reservation data from body; if multer uploaded a file, attach its path
+        const reservationData = { ...(req.body || {}) };
+        if (req.file) {
+            reservationData.photo = req.file.path;
+        }
 
-        const reservation = new Reservation({
-            restaurantId,
-            tableId,
-            numberPeople,
-            typeReservation,
-            description,
-            startDate,
-            endDate,
-            photo
-        })
+        const reservation = new Reservation(reservationData);
 
         await reservation.save()
 

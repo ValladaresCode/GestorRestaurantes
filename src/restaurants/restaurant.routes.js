@@ -8,6 +8,7 @@ import {
   updateRestaurant,
   deleteRestaurant
 } from "./restaurant.controller.js";
+import { uploadFieldImage } from "../../middlewares/file-uploader.js";
 
 const router = Router();
 
@@ -15,7 +16,7 @@ const router = Router();
  * @route   POST /gestorRestaurantes/api/v1/restaurants/create
  * @desc    Crear restaurante
  */
-router.post("/create", createRestaurant);
+router.post("/create", uploadFieldImage.single('restaurantPhoto'), createRestaurant);
 
 /**
  * @route   GET /gestorRestaurantes/api/v1/restaurants

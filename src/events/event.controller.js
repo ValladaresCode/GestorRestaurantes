@@ -1,5 +1,6 @@
 'use strict'
 
+import mongoose from 'mongoose'
 import Event from './event.model.js'
 import Reservation from '../reservations/reservation.model.js'
 
@@ -13,21 +14,20 @@ export const createEvent = async (req, res) => {
 
         const { reservationId, description } = req.body
 
-        // Verificar que la reservación exista
+        if (!reservationId) {
+            return res.status(400).json({ success: false, message: 'reservationId is required' })
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(String(reservationId))) {
+            return res.status(400).json({ success: false, message: 'reservationId is not a valid id' })
+        }
+
         const reservation = await Reservation.findById(reservationId)
 
         if (!reservation) {
             return res.status(404).json({
                 success: false,
                 message: 'Reservation not found'
-            })
-        }
-
-        // Si no es admin, verificar que la reservación sea suya
-        if (req.user.role !== 'ADMIN' && reservation.userId != req.user.uid) {
-            return res.status(403).json({
-                success: false,
-                message: 'You cannot create event for this reservation'
             })
         }
 
@@ -49,11 +49,11 @@ export const createEvent = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Error creating event',
-            err
+            error: err && err.message ? err.message : String(err),
+            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
         })
     }
 }
-
 
 /**
  * Listar eventos de una reservación
@@ -63,9 +63,9 @@ export const getEventsByReservation = async (req, res) => {
 
         const { reservationId } = req.params
 
-        const events = await Event.find({ 
+        const events = await Event.find({
             reservationId,
-            isActive: true 
+            isActive: true
         }).populate('reservationId')
 
         return res.status(200).json({
@@ -83,11 +83,6 @@ export const getEventsByReservation = async (req, res) => {
     }
 }
 
-
-/**
- * Desactivar evento (soft delete)
- * Solo ADMIN
- */
 export const deactivateEvent = async (req, res) => {
     try {
 

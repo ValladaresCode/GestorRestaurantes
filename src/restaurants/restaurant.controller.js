@@ -4,8 +4,7 @@ import mongoose from "mongoose";
 export const createRestaurant = async (req, res) => {
     try {
         const restaurantData = req.body;
-
-        // Si viene foto desde multer + cloudinary
+        
         if (req.file) {
             restaurantData.restaurantPhoto = req.file.path;
         }

@@ -1,15 +1,13 @@
-'use strict'
+"use strict"
 
 import { Router } from 'express'
-import { 
+import {
     createEvent,
     getEventsByReservation,
     deactivateEvent
 } from './event.controller.js'
 
-import { validateJwt } from '../middlewares/validate-jwt.js'
-import { isAdmin } from '../reservations/reservation.middleware.js' 
-// Si querés mejor práctica, después te explico cómo moverlo a middlewares globales
+import { uploadFieldImage } from '../../middlewares/file-uploader.js'
 
 const router = Router()
 
@@ -19,7 +17,8 @@ const router = Router()
  */
 router.post(
     '/',
-    validateJwt,
+    // accept form-data without files so req.body is populated for both JSON and form-data clients
+    uploadFieldImage.none(),
     createEvent
 )
 

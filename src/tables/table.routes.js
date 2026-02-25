@@ -14,13 +14,15 @@ import {
 	validateTableId,
 	validateUpdateTable,
 } from "../../middlewares/table.middleware.js";
+import { uploadFieldImage } from "../../middlewares/file-uploader.js";
 
 const router = Router();
 
-router.post("/", validateCreateTable, createTable);
+// Accept form-data without files by running multer.none() so req.body is populated
+router.post("/", uploadFieldImage.none(), validateCreateTable, createTable);
 router.get("/", validateGetTables, getTables);
 router.get("/:id", validateTableId, getTableById);
-router.put("/:id", validateTableId, validateUpdateTable, updateTable);
+router.put("/:id", validateTableId, uploadFieldImage.none(), validateUpdateTable, updateTable);
 router.delete("/:id", validateTableId, deleteTable);
 
 export default router;

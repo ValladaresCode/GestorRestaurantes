@@ -54,7 +54,6 @@ const restaurantSchema = new mongoose.Schema(
 )
 
 restaurantSchema.index({restaurantActive: 1});
-restaurantSchema.index({restaurantEmail: 1});
 restaurantSchema.index({restaurantActive: 1, restaurantEmail: 1});
 
 export default mongoose.model("Restaurant", restaurantSchema);

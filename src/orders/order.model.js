@@ -38,7 +38,6 @@ const orderSchema = new mongoose.Schema(
             enum: ["PENDIENTE", "ENTREGADO", "CANCELADO"],
             default: "PENDIENTE"
         }
-          
     },
     {
         timestamps: true,
