@@ -2,37 +2,16 @@
 
 import mongoose from 'mongoose'
 import Order from './order.model.js'
-import Restaurant from '../restaurants/restaurant.model.js'
-import Menu from '../menus/menu.model.js'
 
 export const createOrder = async (req, res) => {
   try {
-    let { restaurantId, tableId, items, adminId } = req.body
-
-    // Calculate total price based on menu items
-    let total = 0
-    if (items && items.length > 0) {
-      const menuItems = await Menu.find({ _id: { $in: items } })
-
-      // Create a map for quick access to prices
-      const priceMap = {}
-      menuItems.forEach(menu => {
-        priceMap[menu._id.toString()] = menu.menuPrice
-      })
-
-      // Sum up prices for all items in the order
-      items.forEach(itemId => {
-        if (priceMap[itemId]) {
-          total += priceMap[itemId]
-        }
-      })
-    }
+    const { restaurantId, tableId, items, total, adminId } = req.body
 
     const order = new Order({
       restaurantId,
       tableId: tableId || null,
       items,
-      total,
+      total: total || 0,
       adminId: adminId || null
     })
 

@@ -1,79 +1,86 @@
 'use strict';
 
-import { body, param, validationResult } from 'express-validator';
-import Restaurant from '../src/restaurants/restaurant.model.js';
 import mongoose from 'mongoose';
+import Menu from '../src/menus/menu.model.js';
+import Restaurant from '../src/restaurants/restaurant.model.js';
+import Table from '../src/tables/table.model.js';
 
-const handleValidation = (req, res, next) => {
-    const errors = validationResult(req);
-
-    if (errors.isEmpty()) {
-        return next();
+const parseItems = (rawItems) => {
+    if (Array.isArray(rawItems)) return rawItems.filter(Boolean);
+    if (typeof rawItems === 'string') {
+        try {
+            const parsed = JSON.parse(rawItems);
+            if (Array.isArray(parsed)) return parsed.filter(Boolean);
+        } catch (err) {
+            return rawItems.split(',').map((s) => s.trim()).filter(Boolean);
+        }
+        return rawItems ? [rawItems] : [];
     }
-
-    return res.status(400).json({
-        success: false,
-        message: 'Error de validación',
-        errors: errors.array().map((error) => ({
-            field: error.path,
-            message: error.msg
-        }))
-    });
+    return [];
 };
 
-export const createOrderValidator = [
-    body('restaurantId')
-        .notEmpty().withMessage('El ID del restaurante es obligatorio')
-        .isMongoId().withMessage('El ID del restaurante debe ser válido')
-        .custom(async (value) => {
-            const exists = await Restaurant.exists({ _id: value });
-            if (!exists) {
-                throw new Error('Restaurante no encontrado');
+export const validateCreateOrder = async (req, res, next) => {
+    try {
+        const { restaurantId, tableId } = req.body || {};
+        const items = parseItems(req.body?.items);
+
+        if (!restaurantId || !mongoose.Types.ObjectId.isValid(String(restaurantId))) {
+            return res.status(400).json({ success: false, message: 'restaurantId es obligatorio y debe ser válido' });
+        }
+
+        const restaurantExists = await Restaurant.exists({ _id: restaurantId });
+        if (!restaurantExists) {
+            return res.status(404).json({ success: false, message: 'Restaurante no encontrado' });
+        }
+
+        if (tableId) {
+            if (!mongoose.Types.ObjectId.isValid(String(tableId))) {
+                return res.status(400).json({ success: false, message: 'tableId no es válido' });
             }
-            return true;
-        }),
-    
-    body('tableId')
-        .optional()
-        .isMongoId().withMessage('El ID de la mesa debe ser válido'),
-
-    body('items')
-        .customSanitizer((value) => {
-            // Handle string input from form-data
-            if (typeof value === 'string') {
-                try {
-                    const parsed = JSON.parse(value);
-                    return Array.isArray(parsed) ? parsed : [parsed];
-                } catch (e) {
-                    return value.split(',').map(s => s.trim()).filter(Boolean);
-                }
+            const tableExists = await Table.exists({ _id: tableId, tableActive: true });
+            if (!tableExists) {
+                return res.status(404).json({ success: false, message: 'Mesa no encontrada o inactiva' });
             }
-            return value;
-        })
-        .isArray({ min: 1 }).withMessage('Los ítems deben ser un arreglo no vacío')
-        .custom((items) => {
-            for (const item of items) {
-                if (!mongoose.Types.ObjectId.isValid(String(item))) {
-                    throw new Error(`ID de ítem inválido: ${item}`);
-                }
+        }
+
+        if (!items || !Array.isArray(items) || items.length === 0) {
+            return res.status(400).json({ success: false, message: 'Debes enviar al menos un menú en items' });
+        }
+
+        for (const id of items) {
+            if (!mongoose.Types.ObjectId.isValid(String(id))) {
+                return res.status(400).json({ success: false, message: `Id de menú inválido: ${id}` });
             }
-            return true;
-        }),
+        }
 
-    body('total')
-        .optional()
-        .isNumeric().withMessage('El total debe ser un número'),
+        const menus = await Menu.find({ _id: { $in: items }, menuActive: true });
+        if (menus.length !== items.length) {
+            return res.status(404).json({ success: false, message: 'Uno o más menús no existen o están inactivos' });
+        }
 
-    handleValidation
-];
+        const restaurantMismatch = menus.find((m) => String(m.restaurantId) !== String(restaurantId));
+        if (restaurantMismatch) {
+            return res.status(400).json({ success: false, message: 'Todos los menús deben pertenecer al restaurante indicado' });
+        }
 
-export const updateOrderStatusValidator = [
-    param('id')
-        .isMongoId().withMessage('ID de orden inválido'),
-    
-    body('status')
-        .notEmpty().withMessage('El estado es obligatorio')
-        .isIn(['PENDIENTE', 'ENTREGADO', 'CANCELADO']).withMessage('Estado inválido. Debe ser uno de: PENDIENTE, ENTREGADO, CANCELADO'),
+        const total = menus.reduce((sum, menu) => sum + Number(menu.menuPrice || 0), 0);
 
-    handleValidation
-];
+        req.body.restaurantId = String(restaurantId);
+        req.body.tableId = tableId ? String(tableId) : null;
+        req.body.items = items.map((id) => String(id));
+        req.body.total = total;
+        req.body.adminId = req.adminId || null;
+
+        return next();
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Error al validar la orden', error: error.message });
+    }
+};
+
+export const validateOrderStatus = (req, res, next) => {
+    const { status } = req.body || {};
+    if (!['PENDIENTE', 'ENTREGADO', 'CANCELADO'].includes(status)) {
+        return res.status(400).json({ success: false, message: 'status inválido' });
+    }
+    return next();
+};
