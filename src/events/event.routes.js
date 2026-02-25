@@ -7,8 +7,6 @@ import {
     deactivateEvent
 } from './event.controller.js'
 
-import { validateJwt } from '../middlewares/validate-jwt.js'
-import { isAdmin } from '../reservations/reservation.middleware.js' 
 // Si querés mejor práctica, después te explico cómo moverlo a middlewares globales
 
 const router = Router()
@@ -18,8 +16,7 @@ const router = Router()
  * Usuario autenticado
  */
 router.post(
-    '/',
-    validateJwt,
+    '/create',
     createEvent
 )
 

@@ -13,21 +13,12 @@ export const createEvent = async (req, res) => {
 
         const { reservationId, description } = req.body
 
-        // Verificar que la reservación exista
         const reservation = await Reservation.findById(reservationId)
 
         if (!reservation) {
             return res.status(404).json({
                 success: false,
                 message: 'Reservation not found'
-            })
-        }
-
-        // Si no es admin, verificar que la reservación sea suya
-        if (req.user.role !== 'ADMIN' && reservation.userId != req.user.uid) {
-            return res.status(403).json({
-                success: false,
-                message: 'You cannot create event for this reservation'
             })
         }
 
