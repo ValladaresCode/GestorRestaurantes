@@ -11,6 +11,7 @@ import { corsOptions } from "./cors-configuration.js";
 import restaurantRoutes from "../src/restaurants/restaurant.routes.js";
 import menuRoutes from "../src/menus/menu.routes.js";
 import tableRoutes from "../src/tables/table.routes.js";
+import reservationRoutes from "../src/reservations/reservation.routes.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.get("/health", (_req, res) => {
 app.use("/gestorRestaurantes/api/v1/restaurants", restaurantRoutes);
 app.use("/gestorRestaurantes/api/v1/menus", menuRoutes);
 app.use("/gestorRestaurantes/api/v1/tables", tableRoutes);
+app.use("/gestorRestaurantes/api/v1/reservations", reservationRoutes);
 
 // 🔹 404
 app.use((req, res) => {
