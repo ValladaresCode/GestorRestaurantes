@@ -135,6 +135,53 @@
       ]
     },
     {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"<restaurantId>\",\n  \"tableId\": \"<tableId>\",\n  \"items\": [\"<menuId1>\", \"<menuId2>\"],\n  \"total\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/orders"
+          }
+        },
+        {
+          "name": "Get Orders by Restaurant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/orders/restaurant/:restaurantId"
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ENTREGADO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/orders/status/:id"
+          }
+        }
+      ]
+    },
+    {
       "name": "Events (not mounted by default)",
       "item": [
         { "name": "Create Event (requires auth - validateJwt)", "request": { "method": "POST", "header": [ { "key": "Authorization", "value": "Bearer <token>" } ], "body": { "mode": "raw", "raw": "{ \"reservationId\": \"<reservationId>\", \"description\": \"Evento\" }", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/gestorRestaurantes/api/v1/events/" } },

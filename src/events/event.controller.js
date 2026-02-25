@@ -31,6 +31,13 @@ export const createEvent = async (req, res) => {
             })
         }
 
+        if (reservation.typeReservation !== 'EVENTO') {
+            return res.status(400).json({
+                success: false,
+                message: 'Solo se pueden crear eventos para reservaciones de tipo EVENTO'
+            })
+        }
+
         const event = new Event({
             reservationId,
             description
