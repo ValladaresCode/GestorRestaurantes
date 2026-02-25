@@ -1,6 +1,7 @@
 'use strict'
 
 import Reservation from './reservation.model.js'
+import { v2 as cloudinary } from 'cloudinary'
 
 /**
  * Crear reservación (usuario autenticado)
@@ -12,7 +13,7 @@ export const createReservation = async (req, res) => {
         // build reservation data from body; if multer uploaded a file, attach its path
         const reservationData = { ...(req.body || {}) };
         if (req.file) {
-            reservationData.photo = req.file.path;
+            reservationData.photo = req.file.path; // Cloudinary URL
         }
 
         const reservation = new Reservation(reservationData);
@@ -27,6 +28,16 @@ export const createReservation = async (req, res) => {
 
     } catch (err) {
         console.error(err)
+
+        // Si hay error al guardar, borrar imagen subida
+        if (req.file) {
+            try {
+                // req.file.filename es usualmente el public_id en storage cloudinary
+                await cloudinary.uploader.destroy(req.file.filename);
+            } catch (elimErr) {
+                console.error('Error eliminando imagen fallida', elimErr);
+            }
+        }
 
         return res.status(500).json({
             success: false,

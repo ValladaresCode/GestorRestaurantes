@@ -9,6 +9,7 @@ import {
   deleteRestaurant
 } from "./restaurant.controller.js";
 import { uploadFieldImage } from "../../middlewares/file-uploader.js";
+import { createRestaurantValidator, updateRestaurantValidator } from "../../middlewares/validateRestaurants.js";
 
 const router = Router();
 
@@ -16,7 +17,7 @@ const router = Router();
  * @route   POST /gestorRestaurantes/api/v1/restaurants/create
  * @desc    Crear restaurante
  */
-router.post("/create", uploadFieldImage.single('restaurantPhoto'), createRestaurant);
+router.post("/create", uploadFieldImage.single('restaurantPhoto'), createRestaurantValidator, createRestaurant);
 
 /**
  * @route   GET /gestorRestaurantes/api/v1/restaurants
@@ -34,7 +35,7 @@ router.get("/:id", getRestaurantById);
  * @route   PUT /gestorRestaurantes/api/v1/restaurants/:id
  * @desc    Actualizar restaurante
  */
-router.put("/:id", updateRestaurant);
+router.put("/:id", updateRestaurantValidator, updateRestaurant);
 
 /**
  * @route   DELETE /gestorRestaurantes/api/v1/restaurants/:id

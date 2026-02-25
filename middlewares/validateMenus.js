@@ -2,12 +2,23 @@
 
 import { body, param, validationResult } from 'express-validator';
 import Restaurant from '../src/restaurants/restaurant.model.js';
+import { v2 as cloudinary } from 'cloudinary';
 
-const handleValidation = (req, res, next) => {
+const handleValidation = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (errors.isEmpty()) {
         return next();
+    }
+
+    if (req.file) {
+        try {
+            const publicId = req.file.filename; 
+            await cloudinary.uploader.destroy(publicId);
+            console.log(`Imagen eliminada de Cloudinary debido a error de validación: ${publicId}`);
+        } catch (err) {
+            console.error('Error al eliminar imagen de Cloudinary:', err);
+        }
     }
 
     return res.status(400).json({
