@@ -35,7 +35,13 @@ export const createOrderValidator = [
     
     body('tableId')
         .optional()
-        .isMongoId().withMessage('El ID de la mesa debe ser válido'),
+        .isMongoId().withMessage('El ID de la mesa debe ser válido')
+        .custom((value, { req }) => {
+            if (req.body.orderType === 'EN_RESTAURANTE' && !value) {
+                throw new Error('tableId es obligatorio para pedidos en restaurante');
+            }
+            return true;
+        }),
 
     body('items')
         .customSanitizer((value) => {
@@ -45,7 +51,7 @@ export const createOrderValidator = [
                     const parsed = JSON.parse(value);
                     return Array.isArray(parsed) ? parsed : [parsed];
                 } catch (e) {
-                    return value.split(',').map(s => s.trim()).filter(Boolean);
+                    return value.split(',').map(s => s.trim()).filter(Boolean).map(id => ({ menuId: id, quantity: 1 }));
                 }
             }
             return value;
@@ -53,9 +59,25 @@ export const createOrderValidator = [
         .isArray({ min: 1 }).withMessage('Los ítems deben ser un arreglo no vacío')
         .custom((items) => {
             for (const item of items) {
-                if (!mongoose.Types.ObjectId.isValid(String(item))) {
-                    throw new Error(`ID de ítem inválido: ${item}`);
+                const menuId = item.menuId || item.id || item._id || item;
+                if (!mongoose.Types.ObjectId.isValid(String(menuId))) {
+                    throw new Error(`ID de ítem inválido: ${menuId}`);
                 }
+                if (item.quantity !== undefined && Number(item.quantity) <= 0) {
+                    throw new Error('La cantidad debe ser mayor a 0');
+                }
+            }
+            return true;
+        }),
+
+    body('orderType')
+        .optional()
+        .isIn(['EN_RESTAURANTE', 'A_DOMICILIO', 'PARA_LLEVAR']).withMessage('Tipo de pedido inválido'),
+
+    body('deliveryAddress')
+        .custom((value, { req }) => {
+            if (req.body.orderType === 'A_DOMICILIO' && !value) {
+                throw new Error('La dirección es obligatoria para pedidos a domicilio');
             }
             return true;
         }),
@@ -73,7 +95,7 @@ export const updateOrderStatusValidator = [
     
     body('status')
         .notEmpty().withMessage('El estado es obligatorio')
-        .isIn(['PENDIENTE', 'ENTREGADO', 'CANCELADO']).withMessage('Estado inválido. Debe ser uno de: PENDIENTE, ENTREGADO, CANCELADO'),
+        .isIn(['EN_PREPARACION', 'LISTO', 'ENTREGADO', 'CANCELADO']).withMessage('Estado inválido. Debe ser uno de: EN_PREPARACION, LISTO, ENTREGADO, CANCELADO'),
 
     handleValidation
 ];

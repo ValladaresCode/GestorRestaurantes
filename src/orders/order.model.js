@@ -17,14 +17,36 @@ const orderSchema = new mongoose.Schema(
         tableId:{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Table",
-            default: null
+            default: null,
+            validate: {
+                validator(value) {
+                    // Table is required only when the order is to be served at the restaurant
+                    if (this.orderType === "EN_RESTAURANTE") {
+                        return Boolean(value)
+                    }
+                    return true
+                },
+                message: "tableId is required for dine-in orders"
+            }
         },
 
         items: [
             {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Menu",
-                required: [true, "Menu/s id is required"]
+                menuId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Menu",
+                    required: [true, "Menu id is required"]
+                },
+                quantity: {
+                    type: Number,
+                    min: 1,
+                    required: [true, "quantity is required"]
+                },
+                price: {
+                    type: Number,
+                    min: 0,
+                    required: [true, "price is required"]
+                }
             }
         ],
 
@@ -35,8 +57,23 @@ const orderSchema = new mongoose.Schema(
 
         status:{
             type: String,
-            enum: ["PENDIENTE", "ENTREGADO", "CANCELADO"],
-            default: "PENDIENTE"
+            enum: ["EN_PREPARACION", "LISTO", "ENTREGADO", "CANCELADO"],
+            default: "EN_PREPARACION"
+        },
+
+        orderType: {
+            type: String,
+            enum: ["EN_RESTAURANTE", "A_DOMICILIO", "PARA_LLEVAR"],
+            default: "EN_RESTAURANTE",
+            required: true
+        },
+
+        deliveryAddress: {
+            type: String,
+            default: null,
+            required: function () {
+                return this.orderType === "A_DOMICILIO"
+            }
         }
     },
     {
@@ -47,4 +84,5 @@ const orderSchema = new mongoose.Schema(
 
 orderSchema.index({ restaurantId: 1 });
 orderSchema.index({ status: 1 });
+orderSchema.index({ orderType: 1 });
 export default mongoose.model("Order", orderSchema);

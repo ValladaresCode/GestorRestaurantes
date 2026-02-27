@@ -12,12 +12,13 @@ import { uploadFieldImage } from "../../middlewares/file-uploader.js";
 import { createRestaurantValidator, updateRestaurantValidator } from "../../middlewares/validateRestaurants.js";
 
 const router = Router();
+  import { validateJWT, isAdmin } from "../../middlewares/validate-JWT.js";
 
 /**
  * @route   POST /gestorRestaurantes/api/v1/restaurants/create
  * @desc    Crear restaurante
  */
-router.post("/create", uploadFieldImage.single('restaurantPhoto'), createRestaurantValidator, createRestaurant);
+  router.post("/create", validateJWT, isAdmin, uploadFieldImage.single('restaurantPhoto'), createRestaurantValidator, createRestaurant);
 
 /**
  * @route   GET /gestorRestaurantes/api/v1/restaurants
@@ -35,12 +36,12 @@ router.get("/:id", getRestaurantById);
  * @route   PUT /gestorRestaurantes/api/v1/restaurants/:id
  * @desc    Actualizar restaurante
  */
-router.put("/:id", updateRestaurantValidator, updateRestaurant);
+  router.put("/:id", validateJWT, isAdmin, updateRestaurantValidator, updateRestaurant);
 
 /**
  * @route   DELETE /gestorRestaurantes/api/v1/restaurants/:id
  * @desc    Eliminar restaurante (soft delete recomendado)
  */
-router.delete("/:id", deleteRestaurant);
+  router.delete("/:id", validateJWT, isAdmin, deleteRestaurant);
 
 export default router;

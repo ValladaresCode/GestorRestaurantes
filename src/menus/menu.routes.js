@@ -14,13 +14,14 @@ import {
   validateUpdateMenu
 } from "../../middlewares/validateMenus.js";
 import { uploadFieldImage } from "../../middlewares/file-uploader.js"; 
+import { validateJWT, isAdmin } from "../../middlewares/validate-JWT.js";
 
 const router = Router();
 
-router.post("/", uploadFieldImage.single("menuPhoto"), validateCreateMenu, createMenu);
+router.post("/", validateJWT, isAdmin, uploadFieldImage.single("menuPhoto"), validateCreateMenu, createMenu);
 router.get("/", getMenus);
 router.get("/:id", validateMenuId, getMenuById);
-router.put("/:id", validateMenuId, uploadFieldImage.single("menuPhoto"), validateUpdateMenu, updateMenu);
-router.delete("/:id", validateMenuId, deleteMenu);
+router.put("/:id", validateJWT, isAdmin, validateMenuId, uploadFieldImage.single("menuPhoto"), validateUpdateMenu, updateMenu);
+router.delete("/:id", validateJWT, isAdmin, validateMenuId, deleteMenu);
 
 export default router;

@@ -12,6 +12,10 @@ export const createReservation = async (req, res) => {
 
         // build reservation data from body; if multer uploaded a file, attach its path
         const reservationData = { ...(req.body || {}) };
+        const userIdFromToken = req.userId || (req.user && (req.user.sub || req.user.uid || req.user.id || req.user.userId));
+        if (userIdFromToken) {
+            reservationData.userId = userIdFromToken;
+        }
         if (req.file) {
             reservationData.photo = req.file.path; // Cloudinary URL
         }
@@ -52,8 +56,12 @@ export const createReservation = async (req, res) => {
  */
 export const getMyReservations = async (req, res) => {
     try {
+        const userId = req.userId || (req.user && req.user.userId)
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'No se encontró el usuario en el token' })
+        }
 
-        const reservations = await Reservation.find({ userId: req.user.uid })
+        const reservations = await Reservation.find({ userId })
             .populate('restaurantId')
             .populate('tableId')
 

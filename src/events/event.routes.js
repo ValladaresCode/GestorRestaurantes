@@ -8,6 +8,7 @@ import {
 } from './event.controller.js'
 
 import { uploadFieldImage } from '../../middlewares/file-uploader.js'
+import { validateJWT, isAdmin } from '../../middlewares/validate-JWT.js'
 
 const router = Router()
 
@@ -18,6 +19,8 @@ const router = Router()
 router.post(
     '/',
     // accept form-data without files so req.body is populated for both JSON and form-data clients
+    validateJWT,
+    isAdmin,
     uploadFieldImage.none(),
     createEvent
 )
@@ -27,6 +30,8 @@ router.post(
  */
 router.get(
     '/reservation/:reservationId',
+    validateJWT,
+    isAdmin,
     getEventsByReservation
 )
 
@@ -35,6 +40,8 @@ router.get(
  */
 router.put(
     '/deactivate/:id',
+    validateJWT,
+    isAdmin,
     deactivateEvent
 )
 
