@@ -11,9 +11,9 @@ dotenv.config();
 process.env.NODE_TLS_REJECT_UNAUTHORIZED= '0';
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_CLOUD_NAME.trim(),
+    api_key: process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_KEY.trim(),
+    api_secret: process.env.CLOUDINARY_API_SECRET && process.env.CLOUDINARY_API_SECRET.trim()
 });
 
 const MIMETYPES = [
@@ -24,7 +24,7 @@ const MIMETYPES = [
     'image/avif',
 ]
 
-const MAX_FILE_SIZE = 10*1024*1024; // QUE EN TOTAL SEAN 10MB
+const MAX_FILE_SIZE = 10*1024*1024;
 
 
 const createCloudinaryUploader = (folder) => {
@@ -34,14 +34,14 @@ const createCloudinaryUploader = (folder) => {
             const fileExt = extname(file.originalname);
             const baseName = file.originalname.replace(fileExt, '');
             const safeBase = baseName.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '');
-            const shortUuid = uuidv4().substring(0,0);
+            const shortUuid = uuidv4().substring(0,8);
             const publicId = `${safeBase}-${shortUuid}`;
 
             return {
                 folder: folder,
                 public_id: publicId,
-                allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'avif', ],
-                transformation: [{with: 1000, heigth: 1000, crop: 'limit' }],
+                allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'avif'],
+                transformation: [{ width: 1000, height: 1000, crop: 'limit' }],
                 resource_type: 'image'
             }
         }

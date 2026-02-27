@@ -1,0 +1,214 @@
+{
+  "info": {
+    "name": "GestorRestaurantes - Full API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Auto-generated collection including routes discovered in the project. Update baseUrl variable if needed."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3006",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "Create Restaurant (form-data, file: restaurantPhoto)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "restaurantName", "type": "text", "value": "My Restaurant" },
+                { "key": "restaurantAddress", "type": "text", "value": "Street 123" },
+                { "key": "restaurantPhone", "type": "text", "value": "123456789" },
+                { "key": "restaurantEmail", "type": "text", "value": "test@example.com" },
+                { "key": "openingHours", "type": "text", "value": "09:00" },
+                { "key": "closingHours", "type": "text", "value": "22:00" },
+                { "key": "restaurantPhoto", "type": "file" }
+              ]
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/create"
+          }
+        },
+        {
+          "name": "Get Restaurants",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants" }
+        },
+        {
+          "name": "Get Restaurant by ID",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/:id" }
+        },
+        {
+          "name": "Update Restaurant",
+          "request": { "method": "PUT", "header": [], "body": { "mode": "raw", "raw": "{ \"restaurantName\": \"New name\" }", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/:id" }
+        },
+        {
+          "name": "Delete Restaurant",
+          "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/restaurants/:id" }
+        }
+      ]
+    },
+    {
+      "name": "Menus",
+      "item": [
+        {
+          "name": "Create Menu (form-data, file: menuPhoto)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "menuName", "type": "text", "value": "PizzaMenu" },
+                { "key": "menuDescription", "type": "text", "value": "Delicious" },
+                { "key": "menuPrice", "type": "text", "value": "12" },
+                { "key": "menuCategory", "type": "text", "value": "PLATO_FUERTE" },
+                { "key": "restaurantId", "type": "text", "value": "<restaurantId>" },
+                { "key": "menuPhoto", "type": "file" }
+              ]
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/menus"
+          }
+        },
+        { "name": "Get Menus", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/menus" } },
+        { "name": "Get Menu by ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/menus/:id" } },
+        { "name": "Update Menu (form-data optional file)", "request": { "method": "PUT", "header": [], "body": { "mode": "formdata", "formdata": [ { "key": "menuName", "type": "text", "value": "Updated" }, { "key": "menuPhoto", "type": "file" } ] }, "url": "{{baseUrl}}/gestorRestaurantes/api/v1/menus/:id" } },
+        { "name": "Delete Menu", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/menus/:id" } }
+      ]
+    },
+    {
+      "name": "Tables",
+      "item": [
+        {
+          "name": "Create Table (form-data)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "tableName", "type": "text", "value": "Mesa 1" },
+                { "key": "tableCapacity", "type": "text", "value": "4" },
+                { "key": "restaurantId", "type": "text", "value": "<restaurantId>" }
+              ]
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/tables"
+          }
+        },
+        { "name": "Get Tables", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/tables" } },
+        { "name": "Get Table by ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/tables/:id" } },
+        { "name": "Update Table (form-data)", "request": { "method": "PUT", "header": [], "body": { "mode": "formdata", "formdata": [ { "key": "tableName", "type": "text", "value": "Mesa X" }, { "key": "tableCapacity", "type": "text", "value": "2" } ] }, "url": "{{baseUrl}}/gestorRestaurantes/api/v1/tables/:id" } },
+        { "name": "Delete Table", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/tables/:id" } }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "Create Reservation (form-data, optional file: photo)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "restaurantId", "type": "text", "value": "<restaurantId>" },
+                { "key": "tableId[]", "type": "text", "value": "<tableId>" },
+                { "key": "numberPeople", "type": "text", "value": "4" },
+                { "key": "typeReservation", "type": "text", "value": "PERSONAL" },
+                { "key": "startDate", "type": "text", "value": "2026-02-25T19:00:00Z" },
+                { "key": "endDate", "type": "text", "value": "2026-02-25T21:00:00Z" },
+                { "key": "description", "type": "text", "value": "Cena evento" },
+                { "key": "photo", "type": "file" }
+              ]
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/reservations/create"
+          }
+        },
+        { "name": "Get My Reservations", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/reservations/my-reservations" } },
+        { "name": "Update Reservation Status", "request": { "method": "PUT", "header": [], "body": { "mode": "raw", "raw": "{ \"status\": \"COMPLETADO\" }", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/gestorRestaurantes/api/v1/reservations/status/:id" } }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"<restaurantId>\",\n  \"tableId\": \"<tableId>\",\n  \"items\": [\"<menuId1>\", \"<menuId2>\"],\n  \"total\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/orders"
+          }
+        },
+        {
+          "name": "Get Orders by Restaurant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/orders/restaurant/:restaurantId"
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ENTREGADO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/orders/status/:id"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Statistics",
+      "item": [
+        {
+          "name": "List Restaurant Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/statistics/:restaurantId"
+          }
+        },
+        {
+          "name": "Export Statistics PDF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/gestorRestaurantes/api/v1/statistics/:restaurantId/pdf"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events (not mounted by default)",
+      "item": [
+        { "name": "Create Event (requires auth - validateJwt)", "request": { "method": "POST", "header": [ { "key": "Authorization", "value": "Bearer <token>" } ], "body": { "mode": "raw", "raw": "{ \"reservationId\": \"<reservationId>\", \"description\": \"Evento\" }", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/gestorRestaurantes/api/v1/events/" } },
+        { "name": "Get Events by Reservation", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/events/reservation/:reservationId" } },
+        { "name": "Deactivate Event (ADMIN)", "request": { "method": "PUT", "header": [], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/events/deactivate/:id" } }
+      ]
+    }
+  ]
+}

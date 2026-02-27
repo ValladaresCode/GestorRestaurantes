@@ -1,10 +1,16 @@
 "use strict";
 
 import Menu from "./menu.model.js";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const createMenu = async (req, res) => {
   try {
-    const menu = new Menu(req.body);
+    const menuData = { ...(req.body || {}) };
+    if (req.file) {
+      menuData.menuPhoto = req.file.path;
+    }
+
+    const menu = new Menu(menuData);
     await menu.save();
 
     return res.status(201).json({
@@ -13,6 +19,13 @@ export const createMenu = async (req, res) => {
     });
 
   } catch (error) {
+    if (req.file) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename);
+      } catch (err) {
+        console.error("Error cleaning up image:", err);
+      }
+    }
     return res.status(500).json({
       success: false,
       message: error.message
@@ -54,6 +67,13 @@ export const getMenuById = async (req, res) => {
     });
 
   } catch (error) {
+    if (req.file) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename);
+      } catch (err) {
+        console.error("Error cleaning up image:", err);
+      }
+    }
     return res.status(500).json({
       success: false,
       message: error.message
@@ -63,9 +83,14 @@ export const getMenuById = async (req, res) => {
 
 export const updateMenu = async (req, res) => {
   try {
+    const updateData = { ...(req.body || {}) };
+    if (req.file) {
+      updateData.menuPhoto = req.file.path;
+    }
+
     const menu = await Menu.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true }
     );
 
@@ -82,6 +107,13 @@ export const updateMenu = async (req, res) => {
     });
 
   } catch (error) {
+    if (req.file) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename);
+      } catch (err) {
+        console.error("Error cleaning up image:", err);
+      }
+    }
     return res.status(500).json({
       success: false,
       message: error.message

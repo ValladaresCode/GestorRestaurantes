@@ -1,11 +1,11 @@
 import Restaurant from "./restaurant.model.js";
 import mongoose from "mongoose";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const createRestaurant = async (req, res) => {
     try {
         const restaurantData = req.body;
-
-        // Si viene foto desde multer + cloudinary
+        
         if (req.file) {
             restaurantData.restaurantPhoto = req.file.path;
         }
@@ -20,6 +20,13 @@ export const createRestaurant = async (req, res) => {
         });
         
     } catch (error) {
+        if (req.file) {
+            try {
+                await cloudinary.uploader.destroy(req.file.filename);
+            } catch (err) {
+                console.error("Error cleaning up image:", err);
+            }
+        }
         res.status(400).json({
             success: false,
             message: "Error creating restaurant",
