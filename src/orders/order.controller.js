@@ -3,6 +3,8 @@
 import mongoose from 'mongoose'
 import Order from './order.model.js'
 import Menu from '../menus/menu.model.js'
+import { changeStock } from '../inventory/inventory.controller.js';
+import { createInvoiceFromOrder } from '../invoices/invoice.controller.js';
 
 export const createOrder = async (req, res) => {
   try {
@@ -59,6 +61,18 @@ export const createOrder = async (req, res) => {
     // Clear tableId for non dine-in orders
     const resolvedTableId = orderType === 'EN_RESTAURANTE' ? (tableId || null) : null
 
+    // decrement inventory before persisting the order
+    try {
+      for (const item of itemsWithPrice) {
+        await changeStock(item.menuId, restaurantId, -item.quantity);
+      }
+    } catch (stockErr) {
+      if (stockErr.message === 'Stock insuficiente') {
+        return res.status(400).json({ success: false, message: 'Stock insuficiente para uno de los artículos' });
+      }
+      throw stockErr;
+    }
+
     const order = new Order({
       restaurantId,
       tableId: resolvedTableId,
@@ -69,8 +83,19 @@ export const createOrder = async (req, res) => {
       deliveryAddress: shouldRequireAddress ? deliveryAddress : null
     })
 
-    await order.save()
-    return res.status(201).json({ success: true, message: 'Order created successfully', order })
+    const savedOrder = await order.save()
+
+    // generate invoice document (non‑blocking)
+    try {
+      const invoice = await createInvoiceFromOrder(savedOrder);
+      // optionally link invoice to order
+      savedOrder.invoiceId = invoice._id;
+      await savedOrder.save();
+    } catch (invErr) {
+      console.error('Error generating invoice:', invErr);
+    }
+
+    return res.status(201).json({ success: true, message: 'Order created successfully', order: savedOrder })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ success: false, message: 'Error creating order', error: err && err.message ? err.message : String(err), stack: process.env.NODE_ENV === 'development' ? err.stack : undefined })
@@ -117,3 +142,5 @@ export default {
   getOrdersByRestaurant,
   updateOrderStatus
 }
+
+

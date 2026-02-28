@@ -240,6 +240,516 @@
         { "name": "Get Events by Reservation", "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/events/reservation/:reservationId" } },
         { "name": "Deactivate Event (ADMIN)", "request": { "method": "PUT", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{baseUrl}}/gestorRestaurantes/api/v1/events/deactivate/:id" } }
       ]
+    },
+
+    {
+  "name": "Create Inventory",
+  "request": {
+    "method": "POST",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+      { "key": "Content-Type", "value": "application/json", "type": "text" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/inventory",
+      "host": ["{{baseUrl}}"],
+      "path": ["gestorRestaurantes","api","v1","inventory"]
+    },
+    "body": {
+      "mode": "raw",
+      "raw": "{\n  \"menuId\": \"<MENU_ID>\",\n  \"restaurantId\": \"<REST_ID>\",\n  \"quantity\": 10\n}"
+    }
+  }
+},
+
+{
+  "name": "Create Order (with stock decrement + invoice)",
+  "request": {
+    "method": "POST",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+      { "key": "Content-Type", "value": "application/json", "type": "text" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/orders",
+      "host": ["{{baseUrl}}"],
+      "path": ["gestorRestaurantes","api","v1","orders"]
+    },
+    "body": {
+      "mode": "raw",
+      "raw": "{\n  \"restaurantId\": \"<REST_ID>\",\n  \"items\": [\n    { \"menuId\": \"<MENU_ID>\", \"quantity\": 2 }\n  ],\n  \"orderType\": \"EN_RESTAURANTE\"\n}"
+    }
+  }
+},
+
+{
+  "name": "Get Invoice by ID",
+  "request": {
+    "method": "GET",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/gestorRestaurantes/api/v1/invoices/{{invoiceId}}",
+      "host": ["{{baseUrl}}"],
+      "path": ["gestorRestaurantes","api","v1","invoices","{{invoiceId}}"]
+    }
+  }
+},
+
+ {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Register",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Angel Geovanny Reyes Vinasco\",\r\n  \"email\": \"angelgeovannyvinasco@gmail.com\",\r\n  \"password\": \"contraseña123\",\r\n  \"phone\": \"39539423\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verify-Email",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"token\": \"ZMzSBQn9nrtkR5Q6xMB9yTKtxC2LlM7NlcqVW1aJn9w\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/verify-email",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "verify-email"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "login",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" : \"admin@gestor.local\",\r\n    \"password\" : \"Admin1234!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resend-verification",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"angelgeovannyvinasco@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/resend-verification",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "resend-verification"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Forgot-password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"angelgeovannyvinasco@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/forgot-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset-password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"token\": \"token_de_recuperacion\",\r\n  \"newPassword\": \"NuevaPassword456!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/reset-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfcHpUYmtkOGpEWkpSIiwianRpIjoiYmJkY2QzNTUtMjA5Yy00NjYxLTlhZGMtZDJhY2U0ZWNiMzQxIiwiaWF0IjoxNzcxOTA1MzE1LCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzcxOTA3MTE1LCJhdWQiOiJyVm1Ha0FpU2xNYVIiLCJpc3MiOiJyVm1Ha0FpU2xNYVIifQ.rjLF4c0f97Do0SHd7RcFEbz7iTTeNFphOhPk4X6A3Eo",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/profile",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "profile"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Profile By ID",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfcHpUYmtkOGpEWkpSIiwianRpIjoiYmJkY2QzNTUtMjA5Yy00NjYxLTlhZGMtZDJhY2U0ZWNiMzQxIiwiaWF0IjoxNzcxOTA1MzE1LCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzcxOTA3MTE1LCJhdWQiOiJyVm1Ha0FpU2xNYVIiLCJpc3MiOiJyVm1Ha0FpU2xNYVIifQ.rjLF4c0f97Do0SHd7RcFEbz7iTTeNFphOhPk4X6A3Eo",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"userId\": \"usr_pzTbkd8jDZJR\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/profile/by-id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "profile",
+                    "by-id"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Actualizar rol",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfcmU2N3oxWFlLZVp6IiwianRpIjoiMjNkY2RkZGMtODBkZi00NTNhLTk0NmUtZWVhZTY0M2FkOTA0IiwiaWF0IjoxNzcxOTA3MTgyLCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzcxOTA4OTgyLCJhdWQiOiJyVm1Ha0FpU2xNYVIiLCJpc3MiOiJyVm1Ha0FpU2xNYVIifQ.Eh5NyIi-yemZmtjTQkM3Z1yluEP0uG6YQSAIiSAaDVU",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"roleName\": \"ADMIN_ROLE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/usr_re67z1XYKeZz/role",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "usr_re67z1XYKeZz",
+                    "role"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obtener roles",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfR1Q3Y2Q3ZTMyNE00IiwianRpIjoiN2EzNjEwOTctMTllOC00ODE5LWJmZDAtOTA0ZmE3MTY5Y2IyIiwiaWF0IjoxNzcxOTA2MzkyLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MTkwODE5MiwiYXVkIjoiclZtR2tBaVNsTWFSIiwiaXNzIjoiclZtR2tBaVNsTWFSIn0.e4T5gSz4vC8HiTCJF_uE-4oLvuJ8aQrklMrPXfyqblg",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/usr_re67z1XYKeZz/roles",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "usr_re67z1XYKeZz",
+                    "roles"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obtener users por namerole",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfR1Q3Y2Q3ZTMyNE00IiwianRpIjoiN2EzNjEwOTctMTllOC00ODE5LWJmZDAtOTA0ZmE3MTY5Y2IyIiwiaWF0IjoxNzcxOTA2MzkyLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MTkwODE5MiwiYXVkIjoiclZtR2tBaVNsTWFSIiwiaXNzIjoiclZtR2tBaVNsTWFSIn0.e4T5gSz4vC8HiTCJF_uE-4oLvuJ8aQrklMrPXfyqblg",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/by-role/USER_ROLE",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "by-role",
+                    "USER_ROLE"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "TODOS",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfV1RHQjhKcFJaaFY4IiwianRpIjoiM2JjZDhmNmYtNjlkOS00NDZmLWJmNWQtNGU4ZTgzNDIxYzM4IiwiaWF0IjoxNzcyMTczNTk5LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjE3NTM5OSwiYXVkIjoiR2VzdG9yUmVzdGF1cmFudGVzIiwiaXNzIjoiR2VzdG9yUmVzdGF1cmFudGVzIn0.NRWNz5iwTy_WRygpoR_OmhWASe7DUtJTlVttceZfoc8",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/all",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "all"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": "<JWT>"
     }
   ]
 }
+  
+
+  
+
+

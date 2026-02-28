@@ -17,6 +17,8 @@ import eventRoutes from "../src/events/event.routes.js"
 import statisticsRoutes from "../src/statistics/statistics.routes.js"
 import promotionRoutes from "../src/promotions/promotion.routes.js"
 import reviewRoutes from "../src/reviews/review.routes.js"
+import inventoryRoutes from "../src/inventory/inventory.routes.js"
+import invoiceRoutes from "../src/invoices/invoice.routes.js"
 
 
 const app = express();
@@ -47,6 +49,8 @@ app.use("/gestorRestaurantes/api/v1/events", eventRoutes);
 app.use("/gestorRestaurantes/api/v1/statistics", statisticsRoutes);
 app.use("/gestorRestaurantes/api/v1/promotions", promotionRoutes);
 app.use("/gestorRestaurantes/api/v1/reviews", reviewRoutes);
+app.use("/gestorRestaurantes/api/v1/inventory", inventoryRoutes);
+app.use("/gestorRestaurantes/api/v1/invoices", invoiceRoutes);
 
 // 🔹 404
 app.use((req, res) => {

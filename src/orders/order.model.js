@@ -74,6 +74,11 @@ const orderSchema = new mongoose.Schema(
             required: function () {
                 return this.orderType === "A_DOMICILIO"
             }
+        },
+        invoiceId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Invoice',
+            default: null
         }
     },
     {
