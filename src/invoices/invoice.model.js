@@ -21,12 +21,29 @@ const invoiceSchema = new mongoose.Schema(
     items: [
       {
         menuId: { type: mongoose.Schema.Types.ObjectId, ref: 'Menu' },
-        name: String,
         price: Number,
         quantity: Number
       }
     ],
     total: Number,
+    coupon: {
+      type: String,
+      default: null
+    },
+    discountPercentage: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 0
+    },
+    totalBeforeDiscount: {
+      type: Number,
+      default: null
+    },
+    shippingFee: {
+      type: Number,
+      default: 0
+    },
     issuedAt: {
       type: Date,
       default: Date.now

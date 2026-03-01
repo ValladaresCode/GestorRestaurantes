@@ -38,11 +38,16 @@ const reviewSchema = new mongoose.Schema(
 reviewSchema.index({ restaurantId: 1 })
 reviewSchema.index({ menuId: 1 })
 
-reviewSchema.pre('validate', function (next) {
+// ensure at least one of restaurantId or menuId is provided
+// using a synchronous throw avoids relying on the `next` callback, which
+// occasionally can be something other than a function (leading to the
+// "next is not a function" error during save/validate).
+reviewSchema.pre('validate', function () {
   if (!this.restaurantId && !this.menuId) {
-    return next(new Error('Debe especificar restaurantId o menuId'))
+    // throwing will cause validation to fail with the message below
+    throw new Error('Debe especificar restaurantId o menuId')
   }
-  next()
+  // nothing else to do; the document will continue validating
 })
 
 export default mongoose.model('Review', reviewSchema)

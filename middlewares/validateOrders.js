@@ -86,6 +86,10 @@ export const createOrderValidator = [
         .optional()
         .isNumeric().withMessage('El total debe ser un número'),
 
+    body('coupon')
+        .optional()
+        .isString().withMessage('El cupón debe ser una cadena'),
+
     handleValidation
 ];
 

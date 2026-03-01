@@ -55,6 +55,13 @@ const orderSchema = new mongoose.Schema(
             default: 0
         },
 
+        // optional coupon code applied to the order
+        coupon: {
+            type: String,
+            default: null,
+            trim: true
+        },
+
         status:{
             type: String,
             enum: ["EN_PREPARACION", "LISTO", "ENTREGADO", "CANCELADO"],
@@ -90,4 +97,5 @@ const orderSchema = new mongoose.Schema(
 orderSchema.index({ restaurantId: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ orderType: 1 });
+orderSchema.index({ coupon: 1 });
 export default mongoose.model("Order", orderSchema);

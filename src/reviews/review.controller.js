@@ -3,7 +3,7 @@
 import Review from './review.model.js'
 import mongoose from 'mongoose'
 
-export const createReview = async (req, res) => {
+export const createReview = async (req, res, next) => {
   try {
     const { restaurantId, menuId, rating, comment, userName } = req.body
 
@@ -34,7 +34,10 @@ export const createReview = async (req, res) => {
     await review.save()
     return res.status(201).json({ success: true, message: 'Calificación registrada', review })
   } catch (err) {
-    console.error(err)
+    // log full stack so we can trace where the error originated
+    console.error('createReview error:', err)
+    // forward to default error handler in case other middleware wants to act
+    if (typeof next === 'function') return next(err)
     return res.status(500).json({ success: false, message: 'Error creando calificación', error: err.message })
   }
 }
